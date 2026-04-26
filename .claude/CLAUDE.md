@@ -1,3 +1,7 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
 # Clay Functions Framework — Project Context
 
 ## Who drives this repo
@@ -14,7 +18,11 @@ A framework for designing, documenting, versioning, and governing [Clay Function
 |---|---|
 | `research/` | POV memos and disagreement map that founded the v2 skill's design rules. Historical — don't edit. |
 | `skill/` | The v2 Clay Functions skill. Invoke `/clay-functions-v2` to use it. PRs here = framework improvements. |
-| `functions/` | Register of shipped functions. Build artifacts (specs, usage docs, canvases) live in `skill/`. |
+| `functions/` | Register of shipped functions. Each function gets its own subfolder `functions/<verb_noun>/` with `canvas.md`, `spec.md`, and `usage.md`. |
+
+## Skill installation
+
+To use the skill in any conversation outside this repo, copy `skill/` to `~/.claude/skills/clay-functions-v2/`, then invoke `/clay-functions-v2`. Within this repo the skill is already available via that command.
 
 ## Agents
 
