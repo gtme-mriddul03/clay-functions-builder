@@ -4,8 +4,8 @@ Two documents ship with every Function: a **spec** and a **usage doc**. They ser
 
 | Document | Reader | Lives in | Template |
 |---|---|---|---|
-| Function spec | You and future maintainers | `docs/<function-name>-spec.md` | `assets/templates/function-spec.md` |
-| Usage doc | Clay table builders (including future you) | `docs/<function-name>-usage.md` | `assets/templates/usage-doc.md` |
+| Function spec | You and future maintainers | `functions/<function_name>/spec.md` | `assets/templates/function-spec.md` |
+| Usage doc | Clay table builders (including future you) | `functions/<function_name>/usage.md` | `assets/templates/usage-doc.md` |
 
 ---
 
@@ -49,9 +49,9 @@ Don't repeat the spec's full type/behavior details in the usage doc. Link to the
 
 ## Step-by-step
 
-1. Copy `assets/templates/function-spec.md` to `docs/<function-name>-spec.md`.
+1. Copy `assets/templates/function-spec.md` to `functions/<function_name>/spec.md`.
 2. Fill every section. If a section doesn't apply, delete it — don't leave blank placeholders.
-3. Copy `assets/templates/usage-doc.md` to `docs/<function-name>-usage.md`.
+3. Copy `assets/templates/usage-doc.md` to `functions/<function_name>/usage.md`.
 4. Fill it after your first real run with real output values.
 5. Check: does the usage doc link to the spec? Does the spec have at least one entry in the change log?
 
@@ -70,7 +70,7 @@ If you find yourself writing "make sure" or "ensure that," rewrite it as a concr
 
 ## ADRs — when to write one
 
-Log an ADR (see `references/adr-guide.md`) when you made a non-obvious design call that a future maintainer might question. Examples that warrant an ADR:
+Log an ADR in the spec's **ADRs section** (not a separate file) when you made a non-obvious design call a future maintainer might question. Examples that warrant one:
 
 - You chose not to include a reasoning string after initially planning to
 - You chose one Function over two primitives, or vice versa
@@ -81,4 +81,4 @@ Examples that don't warrant an ADR:
 
 - Naming a field
 - Choosing a default value that's obvious from the behavior
-- Adding a new field (just note it in the change log)
+- Adding a new field (note it in the change log only)

@@ -1,22 +1,18 @@
 # Function Canvas
 
-Copy this file to `working/canvas-<function-name>.md`. Fill it out *before* building. It's a thinking tool, not a doc.
+Copy to `functions/<verb_noun>/canvas.md`. Fill before building. Thinking tool, not a doc.
 
 ---
 
-## Q1 — What does this Function do? (one sentence, verb-first)
-
-<!-- e.g., "Takes a raw URL and returns whether it resolves to a live, non-parked domain." -->
-<!-- No "and." If you need "and," split. -->
+## Q1 — What does this Function do? (one sentence, verb-first, no "and")
 
 **Answer:**
 
 ---
 
-## Q2 — Who uses this? (tables and workflows, not people)
+## Q2 — Who uses this?
 
-<!-- List every Clay table or workflow that will reference this Function.
-     If you can only name one and no second is scheduled, stop. Go build it inline. -->
+List every Clay table or workflow that will reference this Function. If you can only name one and no second is scheduled, stop — build it inline instead.
 
 **Current consumers:**
 
@@ -26,25 +22,31 @@ Copy this file to `working/canvas-<function-name>.md`. Fill it out *before* buil
 
 ## Q3 — What goes in?
 
-<!-- For each input: name, type, required?, default value and what it does -->
-<!-- Max 5 inputs. If you need more, scope is wrong. -->
-
 | Field | Type | Required | Default | Default behavior |
 |---|---|---|---|---|
 | | | | | |
 
+**Exclusion list:** Is there a category that should always disqualify, regardless of positive criteria?
+
+**Pass-throughs:** What does this Function fetch internally? For each fetch, could a caller already have it? (If yes → optional input that skips the fetch.)
+
 ---
 
-## Q4 — What comes out?
+## Q4 — Who consumes the output and what do they need?
 
-<!-- For each output: name, type, value on success, value on failure -->
-<!-- Flat unless natural sub-object. No nested nesting. -->
-<!-- Include reasoning string? Only if a downstream consumer branches on it. -->
-<!-- Include confidence score? Only if a downstream threshold gate reads it. -->
+Name the downstream table, formula, or Function. List only the fields they actually read.
 
-| Field | Type | Success value | Failure value |
-|---|---|---|---|
-| | | | |
+**Consumer:**
+
+**Fields needed:**
+
+---
+
+## Q5 — What comes out?
+
+| Field | Type | Success value | Failure value | Clay column name |
+|---|---|---|---|---|
+| | | | | |
 
 **Reasoning string needed?** Yes / No — because:
 
@@ -52,19 +54,21 @@ Copy this file to `working/canvas-<function-name>.md`. Fill it out *before* buil
 
 ---
 
-## Q5 — Is anything in here independently useful to a different Function?
+## Q6 — Agent architecture (model fills this — do not leave blank, do not ask the user)
 
-<!-- If yes, name the other Function and the shared primitive. -->
-<!-- If no, all logic stays inside this Function. -->
+Infer: fetch agents → Claygent (internet); classification agents → LLM (no internet). Independent fetches → parallel. Every fetch has a pass-through input from Q3.
+
+**Inferred design:**
+
+---
+
+## Q7 — Is anything here independently useful to a different Function?
 
 **Answer:**
 
 ---
 
-## Q6 — What's the one failure mode we need to handle explicitly?
-
-<!-- e.g., "Input URL is empty string" / "Domain redirects to a different registrable domain" -->
-<!-- Define what the output is in that case. -->
+## Q8 — Primary failure case
 
 **Failure case:**
 
@@ -72,15 +76,26 @@ Copy this file to `working/canvas-<function-name>.md`. Fill it out *before* buil
 
 ---
 
+## Q9 — Clay column names
+
+What will the Clay column calling this Function be named? See `references/naming-conventions.md`.
+
+**Function column:**
+
+**Key output columns:**
+
+---
+
 ## Go / No-Go
 
-After filling Q1–Q6, check:
-
 - [ ] Q1 has no "and"
-- [ ] Q2 has at least 2 consumers, or one incoming this week (confirmed, not speculative — name the table or workflow)
-- [ ] Q3 has ≤5 inputs
-- [ ] Q4 has failure values for every field
-- [ ] Q5 is answered (not blank)
-- [ ] Q6 is answered (not blank)
+- [ ] Q2 has ≥2 named consumers
+- [ ] Q3 exclusion list and pass-throughs answered
+- [ ] Q4 consumer named before outputs designed
+- [ ] Q5 has failure values for every field and Clay column names filled
+- [ ] Q6 answered if agents are involved
+- [ ] Q7 answered
+- [ ] Q8 answered
+- [ ] Q9 follows naming-conventions.md
 
-All checked? Take this canvas to `sop/01-design.md` Step 1 and lock the interface.
+All checked → take to `sop/01-design.md`.

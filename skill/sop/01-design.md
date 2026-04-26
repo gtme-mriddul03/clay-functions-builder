@@ -1,18 +1,20 @@
 # SOP 01 — Designing a Function's Scope and Interface
 
-Do this after passing `sop/00-when-to-build.md` and filling the canvas. This SOP takes your draft canvas and locks the interface.
+Do this after passing `sop/00-when-to-build.md` and filling the canvas.
+
+**Batching rule:** send all questions within a step together — see SKILL.md. No single-question round-trips.
 
 ---
 
 ## Step 1 — Confirm scope with the one-sentence test
 
-Write the Function name and a one-sentence description of what it does. The sentence must:
+Write the Function name and a one-sentence description. The sentence must:
 
 - Start with a verb
 - Describe the input → output transformation
-- Contain no "and," no "or," no "also"
+- Contain no "and," "or," or "also"
 
-If you can't write that sentence, the scope isn't clear yet. Go back to the canvas.
+If you can't write that sentence, scope isn't clear. Go back to the canvas.
 
 **Pass:** `validate_domain: Takes a raw URL string and returns whether it resolves to a live, non-parked domain.`
 
@@ -24,68 +26,82 @@ If you can't write that sentence, the scope isn't clear yet. Go back to the canv
 
 For each input field, answer:
 
-1. What type is it? (string, boolean, number, enum — pick one, not "string or number")
-2. Is it required or optional?
-3. If optional, what's the default value and what behavior does the default produce?
+1. What type? (string, boolean, number, enum — pick one)
+2. Required or optional?
+3. If optional: what's the default, and what does it do?
 
 **Rules:**
-- Mark an input required only if the Function cannot produce any output without it.
-- If an input affects behavior depth or behavior variant (e.g., "check HTTPS only" vs "check HTTPS + parked"), make it an optional enum with a documented default. Don't make callers pass it every time.
-- No more than 5 inputs. If you need more, the scope is probably wrong.
+- Required only if the Function cannot produce any output without it.
+- Behavior variants → optional enum with documented default. Not a boolean flag.
+- No more than 5 inputs. If you need more, check scope first — but defend the extra if justified.
 - Don't use boolean flags to toggle between fundamentally different behaviors. Use an enum.
 
-**Example input table:**
+**Two standing questions for every Function:**
 
-| Field | Type | Required | Default | Effect of default |
+1. **Exclusion list:** Are there categories that always disqualify, regardless of the positive criteria? If yes, add `excluded_[concept]` as an optional input (default: null).
+2. **Pass-throughs:** What data does this Function fetch internally? For each fetch, ask: could a caller already have this? If yes, add it as an optional input so the fetch is skipped. This is the most common source of missed inputs.
+
+**Example:**
+
+| Field | Type | Required | Default | Default behavior |
 |---|---|---|---|---|
 | `url` | string | yes | — | — |
 | `depth` | enum: `basic`, `full` | no | `basic` | HTTP check only; skip parked detection |
 
 ---
 
-## Step 3 — Design outputs
+## Step 3 — Downstream consumer
 
-1. List every output field you intend to return.
-2. For each field: name, type, and what value it takes when the check fails vs passes.
-3. Answer the reasoning string question: will any downstream consumer **branch on** the reasoning text? If yes, include it. If no, omit it.
-   - **"Branches on" defined:** the next workflow step (a Claygent prompt, a formula, another Function, a CRM sync filter) reads the value of the reasoning string and behaves differently based on its content. "A reviewer might want to read it" is not branching. "It might be useful someday" is not branching. The reader has to be a downstream *workflow step*, and the read has to change behavior.
-4. Answer the confidence score question: is there a downstream threshold gate that reads this score? If yes, include it. If no, omit it.
+Before designing outputs, answer: **what table, formula, or downstream Function consumes this output, and what fields does it need?**
+
+Design outputs from the consumer backward — only include fields a named consumer actually reads. Fields with no named consumer are omitted.
+
+---
+
+## Step 4 — Design outputs
+
+1. List every output field a named consumer needs.
+2. For each: name, type, success value, failure value.
+3. Reasoning string: will any downstream step branch on its content? If yes, include. If no, omit.
+4. Confidence score: is there a threshold gate downstream that reads it? If yes, include. If no, omit.
 
 **Rules:**
-- Keep outputs flat. One level of nesting is OK for a coherent sub-object with 3+ fields. No deeper.
-- Every output field must have a defined failure value (not just a success value). `null` is a valid failure value; document it explicitly.
-- Boolean status fields are fine for simple pass/fail. If the downstream consumer needs to distinguish *why* it failed, use an enum status field instead of a boolean.
-- Name fields for what they contain, not how they were computed. `is_live` not `http_check_result`.
+- Flat by default. One level of nesting OK for a coherent sub-object with 3+ related fields.
+- Every field needs a defined failure value. `null` is valid; document it.
+- Boolean for simple pass/fail. Enum if the consumer needs to distinguish *why* it failed.
+- Name fields for what they contain, not how they were computed.
 
-**Example output table:**
+**Example:**
 
 | Field | Type | Success value | Failure value |
 |---|---|---|---|
 | `is_valid` | boolean | `true` | `false` |
-| `status` | enum: `live`, `parked`, `unreachable`, `redirect_mismatch` | `live` | one of the others |
+| `status` | enum: `live`, `parked`, `unreachable` | `live` | one of the others |
 | `canonical_url` | string | resolved URL | `null` |
-| `reasoning` | string | explanation | explanation of failure |
 
 ---
 
-## Step 4 — Composition check
+## Step 5 — Agent architecture (if agents are involved)
 
-Look at your input and output design. Ask:
+If this Function uses LLM agents, infer and document the architecture. Do not ask the user to define this — derive it from the input/output design and present it for confirmation.
 
-- Is any part of this Function's logic independently useful to a different Function I already have or am planning?
-- If I extracted that part as a primitive, would the primitive appear in 2+ Functions?
-
-If yes to both: extract the primitive, run SOP 00–01 on it, and reference it from this Function.
-
-If no: all the logic stays inside this Function.
-
-Do not extract a primitive "just in case." Extract it only when the second use is concrete and in-hand.
+Infer per SKILL.md agent architecture rules (internet access from purpose, parallelism from dependencies, pass-throughs from Step 2 inputs). Present the inferred design as a one-sentence summary and ask the user to confirm or correct — do not ask them to define it.
 
 ---
 
-## Step 5 — Lock the interface
+## Step 6 — Composition check
 
-Write the final interface block. This is the contract. Once you publish v1, this is what you cannot change without a version bump.
+- Is any part of this Function's logic independently useful to a *different* Function (not just another table)?
+- If extracted as a primitive, would it appear in 2+ Functions?
+
+Yes to both: extract the primitive, run SOP 00–01 on it, reference it from this Function.
+No: all logic stays inside this Function.
+
+Do not extract primitives speculatively.
+
+---
+
+## Step 7 — Lock the interface
 
 ```
 Function: <name>
@@ -94,21 +110,31 @@ Inputs:
   - <field>: <type>, required/optional, default: <value>
 Outputs:
   - <field>: <type>
-  - ...
-Breaking change policy: removing or renaming any field, changing any field's type, or changing input defaults that affect existing callers.
-Additive change policy: adding new optional output fields.
+Version increment triggers: <what would force a v2>
+Breaking change policy: removing/renaming any field, changing any field's type, changing input defaults that affect existing callers.
+Additive change policy: adding new optional output fields or optional inputs with behavior-preserving defaults.
 ```
 
-Once this block is written and you're building, treat it as locked. Any change to it before publish is fine. Any change to it after publish that would break consumers requires a new version.
+Once written and published, any change that breaks a consumer requires a new version.
 
 ---
 
-## Step 6 — Name it
+## Step 8 — Name it
 
-Function names:
+**Function name (internal):**
+- Lowercase, underscores: `check_icp_industry`
+- Verb_noun format. Two words max — more usually means scope is too broad.
 
-- Lowercase, underscores, no hyphens
-- Verb_noun format: `validate_domain`, `normalize_url`, `check_email`
-- Version suffix in the Clay UI name: `validate_domain_v1` (not in the internal function name in specs — the spec carries the version field separately)
+**Clay UI name:**
+- Version suffix: `check_icp_industry_v1`
 
-If your name has more than two words, the scope might be too broad. Check it.
+**Function folder:**
+- `functions/check_icp_industry/`
+
+**Clay column names (for columns that call or reference this Function):**
+- Follow `references/naming-conventions.md`
+- The column calling the Function → Title Case name matching its purpose
+- Boolean outputs → `Is [X]?`
+- Agent columns inside the Function → `Claygent: [Verb] [Subject]` or `LLM: [Verb] [Subject]`
+
+When naming is done, copy `assets/templates/function-spec.md` to `functions/<verb_noun>/spec.md` and fill all sections.

@@ -9,6 +9,18 @@ This skill governs how we design, version, document, and publish Clay Functions 
 
 Clay handles internal workflow diffs safely via sandboxed editing. What Clay does **not** enforce is what counts as a breaking vs additive interface change. We enforce that. This skill is that policy.
 
+## How to run a session
+
+**Opening:** When invoked for a new function design, open with a single batched set of 2–5 Socratic discovery questions before running any gate. Cover: what the function does, who the callers are, what data callers already have, what should always disqualify, and whether agents are involved. Do not proceed to gates until these are answered.
+
+**Batching:** All clarifying questions within a phase go out as a single numbered list. Answer together, then advance. No single-question round-trips.
+
+**SOP loading:** Load only the SOP section needed for the current phase. Do not read all files upfront.
+
+**File output:** Check for a `functions/` folder in the working root. Create it if missing. Write each function's files to `functions/<verb_noun>/` — never to the skill's global installation directory (files there are invisible to the function register and won't be versioned with the project).
+
+**Agent architecture:** When a function involves LLM agents, infer internet access, parallelism, and pass-through inputs from the design — do not ask the user to spec this. Present the inferred architecture as a summary for quick confirmation.
+
 ## When to use which file
 
 | Task | Go to |
@@ -19,24 +31,20 @@ Clay handles internal workflow diffs safely via sandboxed editing. What Clay doe
 | Writing documentation | [sop/03-document.md](sop/03-document.md) |
 | About to publish | [sop/04-pre-publish-checklist.md](sop/04-pre-publish-checklist.md) |
 | Logging a design decision | [references/adr-guide.md](references/adr-guide.md) |
-| Understanding how Functions fail and how the framework guards against each | [references/failure-modes.md](references/failure-modes.md) |
+| Clay column naming | [references/naming-conventions.md](references/naming-conventions.md) |
+| How Functions fail and framework guardrails | [references/failure-modes.md](references/failure-modes.md) |
 | Blank templates | [assets/templates/](assets/templates/) |
 | Mental model / why this exists | [references/mental-model.md](references/mental-model.md) |
 
-## Start here if you're new
-
-Read `references/mental-model.md` first — it's short. Then run through `sop/00-when-to-build.md` on your first candidate Function. The templates in `assets/templates/` are fillable starting points; they're not worth reading cold.
-
-The `docs/` and `working/` directories ship empty by design — they hold per-Function output (filled specs, filled usage docs) and pre-build canvas drafts respectively, populated as you use the skill rather than pre-loaded with content.
-
 ## The opinionated positions this skill takes
 
-These are decisions, not suggestions. If you want to revisit any of them, log an ADR.
-
-1. **Build gate**: a pattern earns a Function when it's used in 2+ tables, OR a confirmed second use is incoming this week. Not before. Full gate in [`sop/00`](sop/00-when-to-build.md).
-2. **Composition default**: start with one deep Function. Extract a primitive only when it is concretely needed by a *different* Function (not just another table). Full rule in [`sop/01`](sop/01-design.md#step-4--composition-check).
-3. **Outputs**: flat by default. One nesting level is OK for a coherent sub-object with 3+ related fields. No deeper. Full rule in [`sop/01`](sop/01-design.md#step-3--design-outputs).
-4. **Reasoning strings**: include one only if a downstream consumer *branches on* the reasoning text (the next step reads its content and acts differently). Omit otherwise.
-5. **Confidence scores**: never include unless the consuming workflow has an explicit threshold gate that reads the score.
-6. **Versions**: removing/renaming an output field, changing a field's type, removing a required input, or changing the default of an existing optional input in a way that affects current callers — all breaking, all require a new version. Adding a new optional output field or a new optional input with a behavior-preserving default is additive (no bump). Full classification in [`sop/02`](sop/02-version.md#step-1--classify-the-change).
-7. **Deprecation**: old versions stay live for 30 days after the new version ships. After 30 days, remove with no ceremony.
+1. **Build gate**: a pattern earns a Function when it's used in 2+ tables, OR a confirmed second use is incoming this week. Full gate in [`sop/00`](sop/00-when-to-build.md).
+2. **Composition default**: start with one deep Function. Extract a primitive only when it is concretely needed by a *different* Function. Full rule in [`sop/01`](sop/01-design.md#step-6--composition-check).
+3. **Outputs**: flat by default. One nesting level OK for a coherent sub-object with 3+ related fields. Full rule in [`sop/01`](sop/01-design.md#step-4--design-outputs).
+4. **Reasoning strings**: include only if a downstream step branches on its content. Omit otherwise.
+5. **Confidence scores**: never include unless a downstream threshold gate reads the score.
+6. **Versions**: removing/renaming an output field, changing a field's type, removing a required input, or changing an existing optional input's default in a way that affects callers — all breaking. Adding a new optional output field or optional input with a behavior-preserving default is additive. Full classification in [`sop/02`](sop/02-version.md).
+7. **Deprecation**: old versions stay live for 90 days after the new version ships (60 days for security/correctness breaks). After window closes, remove.
+8. **Exclusion inputs**: always ask if there are categories that should always disqualify, regardless of positive criteria. Default to adding `excluded_[concept]` as optional input.
+9. **Pass-throughs**: for every external fetch inside a Function, add a corresponding optional input so callers can skip the fetch if they already have the data.
+10. **Naming**: Clay columns follow `references/naming-conventions.md`. Function names are `verb_noun`. Clay UI names are `verb_noun_vN`.
