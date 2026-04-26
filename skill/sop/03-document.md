@@ -1,0 +1,84 @@
+# SOP 03 — Writing Documentation for a Function
+
+Two documents ship with every Function: a **spec** and a **usage doc**. They serve different readers. Don't conflate them.
+
+| Document | Reader | Lives in | Template |
+|---|---|---|---|
+| Function spec | You and future maintainers | `docs/<function-name>-spec.md` | `assets/templates/function-spec.md` |
+| Usage doc | Clay table builders (including future you) | `docs/<function-name>-usage.md` | `assets/templates/usage-doc.md` |
+
+---
+
+## When to write each
+
+Write both **before you publish**. Not after. If you can't fill the spec before building, you don't know what you're building yet.
+
+The spec is filled during design (`sop/01-design.md`). The usage doc is filled after you've run the Function once and seen real output.
+
+---
+
+## The spec — what it contains and why
+
+The spec is the source of truth for the Function's interface contract. It answers: what does this Function accept, what does it return, and what changed across versions?
+
+Mandatory sections (see template):
+1. **Identity** — name, version, one-sentence description
+2. **Inputs table** — every input field with type, required/optional, default, and what the default does
+3. **Outputs table** — every output field with type, success value, and failure value
+4. **Behavior notes** — edge cases that aren't obvious from the field types (e.g., "if `depth` is `basic`, `canonical_url` is always `null`")
+5. **Change log** — one row per version with: version number, date, type (additive/breaking), and what changed
+
+Don't put usage examples in the spec. That goes in the usage doc.
+
+---
+
+## The usage doc — what it contains and why
+
+The usage doc is what you hand to someone building a Clay table. It answers: how do I reference this Function, what does the output look like in a cell, and when should I use the `full` depth vs `basic`?
+
+Mandatory sections (see template):
+1. **One-liner** — what this Function does in plain language
+2. **When to use it** — 2–3 concrete use cases
+3. **Input reference** — a quick table (field, what to pass, example value)
+4. **Output reference** — what the output object looks like in a Clay cell with a real example value
+5. **Common patterns** — 2–3 concrete formulas or downstream patterns that consume this Function's output
+
+Don't repeat the spec's full type/behavior details in the usage doc. Link to the spec for that.
+
+---
+
+## Step-by-step
+
+1. Copy `assets/templates/function-spec.md` to `docs/<function-name>-spec.md`.
+2. Fill every section. If a section doesn't apply, delete it — don't leave blank placeholders.
+3. Copy `assets/templates/usage-doc.md` to `docs/<function-name>-usage.md`.
+4. Fill it after your first real run with real output values.
+5. Check: does the usage doc link to the spec? Does the spec have at least one entry in the change log?
+
+---
+
+## What "testable steps" means for docs
+
+Every step in the usage doc that says "do X" must be something the reader can verify. Examples:
+
+- "Pass the raw domain string from your CRM column" — testable. They can look at the column and see if it's a raw domain.
+- "Make sure the URL is valid" — not testable. Valid how? What does invalid look like?
+
+If you find yourself writing "make sure" or "ensure that," rewrite it as a concrete check or a concrete action.
+
+---
+
+## ADRs — when to write one
+
+Log an ADR (see `references/adr-guide.md`) when you made a non-obvious design call that a future maintainer might question. Examples that warrant an ADR:
+
+- You chose not to include a reasoning string after initially planning to
+- You chose one Function over two primitives, or vice versa
+- You chose an enum status field over a boolean because you anticipated more than two states
+- You changed the output shape in a way that required a version bump
+
+Examples that don't warrant an ADR:
+
+- Naming a field
+- Choosing a default value that's obvious from the behavior
+- Adding a new field (just note it in the change log)
