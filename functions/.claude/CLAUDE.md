@@ -1,16 +1,28 @@
 # Functions — Context
 
-This folder is a register of shipped Clay Functions. It is not where function files are stored.
+This folder is the register and home for all shipped Clay Functions.
 
-**File locations (per the v2 skill):**
+## File locations
 
-| Artifact | Where it lives |
-|---|---|
-| Canvas draft (pre-build) | `../skill/working/<function-name>-canvas.md` |
-| Function spec | `../skill/docs/<function-name>-spec.md` |
-| Usage doc | `../skill/docs/<function-name>-usage.md` |
-| ADR (if needed) | `../skill/decisions/<date>-<function-name>.md` |
+Each function gets its own subfolder:
 
-**To build a function:** invoke `/clay-functions-v2` and start at `sop/00-when-to-build.md`.
+```
+functions/
+  <verb_noun>/
+    canvas.md   ← pre-build thinking tool (filled before building)
+    spec.md     ← interface contract; includes ADRs inline (filled during design, updated on every change)
+    usage.md    ← for table builders (filled after first real run)
+```
 
-**When a function ships:** add a row to `README.md` in this folder with the function name and links to its spec and usage doc in `../skill/docs/`.
+When the skill runs, it checks for a `functions/` folder in the working root and creates it if missing. Files are always written here — never to the skill's global installation directory.
+
+## Register
+
+When a function ships, add a row to `README.md`:
+
+| Function | Version | Spec | Usage doc | Status |
+|---|---|---|---|---|
+
+## To build a function
+
+Invoke `/clay-functions-v2` and start at `sop/00-when-to-build.md`.

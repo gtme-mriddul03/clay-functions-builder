@@ -35,7 +35,7 @@ In Clay:
 1. **Duplicate** the current Function in the Clay UI. Name the duplicate `<function_name>_v<N+1>`.
 2. Do **not** edit the live version yet. All changes happen in the new duplicate.
 3. Update the version field in the Function's spec (see `assets/templates/function-spec.md`) and add a row to the spec's change log (this records *what* changed and is always required).
-4. File an ADR in `decisions/` only if the version bump involves a non-obvious design call — see [`references/adr-guide.md`](../references/adr-guide.md) for when that applies. Routine breaking bumps (a renamed field, a removed field) don't need an ADR; the spec's change-log row is enough.
+4. If the version bump involves a non-obvious design call, add an ADR entry to the spec's **ADRs section** — see [`references/adr-guide.md`](../references/adr-guide.md) for when that applies. Routine breaking bumps (a renamed field, a removed field) only need a change-log row.
 
 ---
 
@@ -60,11 +60,11 @@ Build the new version in the duplicated Function. When it's ready:
 ## Step 4b — Breaking path (new version)
 
 1. Publish the new version.
-2. Update every table referencing the old version to point to the new version. Do this within 30 days.
-3. Set a reminder: after 30 days from publish, delete the old version.
-4. After 30 days, delete the old version from the Clay UI. No ceremony.
+2. Update every table referencing the old version to point to the new version. Do this within 90 days (60 days for security or correctness breaks where v1 returns wrong data).
+3. Set a reminder at the migration deadline to delete the old version.
+4. After the window closes, delete the old version from the Clay UI. No ceremony.
 
-**The 30-day window is a hard deadline, not a suggestion.** Old versions accumulate overhead — documentation, confusion, parallel maintenance. Cut them.
+**The migration window is not a suggestion.** Old versions accumulate overhead — documentation, confusion, parallel maintenance. Cut them on schedule.
 
 ---
 
@@ -72,9 +72,9 @@ Build the new version in the duplicated Function. When it's ready:
 
 After any change (additive or breaking):
 
-- Update `function-spec.md` for this Function with the new field or version.
+- Update `functions/<function_name>/spec.md` with the new field or version.
 - Add a row to the change log table in the spec (always required, both additive and breaking).
-- If a non-obvious design call was involved: file the ADR per Step 2 item 4 and `references/adr-guide.md`.
+- If a non-obvious design call was involved: add an ADR entry to the spec's ADRs section per Step 2 item 4.
 
 ---
 
@@ -83,8 +83,8 @@ After any change (additive or breaking):
 | What | Convention |
 |---|---|
 | Clay UI Function name | `validate_domain_v1`, `validate_domain_v2` |
-| Spec filename | `validate_domain-spec.md` (no version in filename — version lives inside the spec) |
-| ADR filename | `YYYYMMDD-validate-domain-v2.md` |
+| Spec filename | `functions/validate_domain/spec.md` (no version in filename — version lives inside the spec) |
+| ADR | Inline in the spec's ADRs section — no separate file |
 
 The spec file has one version per section. You don't need a new spec file per version — the spec tracks the history.
 
@@ -94,5 +94,5 @@ The spec file has one version per section. You don't need a new spec file per ve
 
 Design calls that aren't obvious:
 
-- **Why 30-day deprecation window?** Long enough for a deliberate migration. Short enough that old versions don't become permanent. If a table isn't migrated in 30 days, that's a process failure, not a reason to extend the window.
+- **Why 90-day deprecation window (60 for critical breaks)?** 90 days matches quarterly planning cycles and gives consumers time to migrate deliberately. 60 days applies when v1 is actively returning wrong data — faster forcing function, still not a panic sprint. 30-day windows were rejected as incompatible with the pin-per-column model.
 - **Why duplicate in Clay rather than edit in place?** Because the old version stays live while you build and test the new one. Editing in place would break consumers during development.

@@ -1,55 +1,44 @@
 # SOP 04 — Pre-Publish Checklist
 
-Run this before you hit publish on any Function (new or updated). Every item is a yes/no gate. If any item is No, fix it before publishing.
+Run this before publishing any Function. Render as a pass/fail table — one row per check, no prose.
 
----
-
-## Interface
-
-- [ ] The Function name follows `verb_noun_vN` format in the Clay UI
-- [ ] Every required input is documented in the spec with type and description
-- [ ] Every optional input has a default value that's documented and produces defined behavior
-- [ ] No more than 5 inputs total (per [`sop/01` Step 2](01-design.md#step-2--design-inputs))
-- [ ] Every output field is documented with type, success value, and failure value
-- [ ] No output field is listed as "TBD" or "varies"
-- [ ] Outputs are flat OR have at most one level of nesting, and any sub-object has 3+ related fields (per [`sop/01` Step 3](01-design.md#step-3--design-outputs))
-- [ ] If a `reasoning` string output is present: a downstream consumer branches on its content (the next workflow step reads the value and acts differently). If not, the field is removed before publish.
-- [ ] If a `confidence` score output is present: the consuming workflow has an explicit threshold gate that reads it. If not, the field is removed before publish.
-
-## Scope
-
-- [ ] The one-sentence scope description passes the test in `sop/01-design.md` Step 1 (no "and", one verb, clear input→output)
-- [ ] If this Function composes sub-Functions: each sub-Function is already published and versioned
-
-## Documentation
-
-- [ ] `docs/<function-name>-spec.md` exists and all sections are filled
-- [ ] `docs/<function-name>-usage.md` exists with at least one real example output value
-- [ ] If this is a version bump (additive or breaking): the change log row in the spec is filled with version, date, type, and what changed
-- [ ] If this version bump involved a non-obvious design call: an ADR is filed in `decisions/` (see [`references/adr-guide.md`](../references/adr-guide.md))
-
-## Versioning
-
-- [ ] If this is v1: the spec shows version 1 and the change log has the initial entry
-- [ ] If this is v2+: the previous version is still live (you haven't deleted it yet)
-- [ ] If this is v2+: a 30-day reminder is set to migrate consumers and delete the old version
-
-## Consumers
-
-- [ ] You know every table currently referencing this Function (list them in the spec if >1)
-- [ ] If breaking change: you've confirmed each consumer table will be updated within 30 days
-- [ ] If additive change: you've re-checked the change against the additive list in [`sop/02` Step 1](02-version.md#step-1--classify-the-change) and confirmed it adds nothing required and removes nothing
+| Item | Status | Note |
+|---|---|---|
+| **Interface** | | |
+| Function name follows `verb_noun_vN` in Clay UI | | |
+| Every required input documented with type | | |
+| Every optional input has a documented default and defined behavior | | |
+| Every output field has type, success value, and failure value | | |
+| No output field is "TBD" or "varies" | | |
+| Outputs flat, or one nesting level with 3+ related fields | | |
+| `reasoning` field present only if a downstream step branches on its content | | |
+| `confidence` field present only if a downstream threshold gate reads it | | |
+| **Scope** | | |
+| One-sentence description passes: verb-first, no "and", clear input→output | | |
+| Sub-Functions (if any) are already published and versioned | | |
+| **Documentation** | | |
+| `functions/<name>/spec.md` exists and all sections filled | | |
+| `functions/<name>/usage.md` exists with at least one real output example | | |
+| Clay column names section filled in spec | | |
+| Version increment triggers documented in spec | | |
+| Change log has at least the initial v1 entry | | |
+| Non-obvious design decisions noted as ADRs in spec | | |
+| **Versioning** | | |
+| v1: spec shows version 1, change log has initial entry | | |
+| v2+: previous version still live | | |
+| v2+: consumer migration window calendared | | |
+| **Consumers** | | |
+| All consuming tables listed in spec | | |
+| Breaking change: each consumer confirmed for update within migration window | | |
 
 ---
 
 ## Publish
 
-Only publish after every box above is checked. Clay's sandbox diff shows you what changes. Read it. If anything looks unexpected, stop and investigate.
-
----
+Only publish after every applicable row is Pass. Clay's sandbox diff shows what changes — read it before confirming.
 
 ## After publish
 
-- Update `docs/<function-name>-spec.md` change log with the publish date if it was a version bump
-- If breaking: calendar the 30-day migration deadline
-- Tell whoever manages the downstream tables that the new version is live
+- Update spec change log with publish date
+- If breaking: calendar the migration deadline
+- Notify owners of downstream tables

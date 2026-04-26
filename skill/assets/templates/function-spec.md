@@ -1,8 +1,5 @@
 # Function Spec — `<function_name>`
 
-<!-- This is the interface contract. Fill it during design. Update it on every change. -->
-<!-- One file per Function. Versions are tracked in the Change Log section below. -->
-
 ---
 
 ## Identity
@@ -12,8 +9,8 @@
 | Name | `<function_name>` |
 | Current version | v1 |
 | Clay UI name | `<function_name>_v1` |
-| One-line description | <!-- verb-first, input→output, no "and" --> |
-| Status | `active` / `deprecated — use <replacement>` |
+| One-line description | |
+| Status | `active` |
 
 ---
 
@@ -21,36 +18,59 @@
 
 | Field | Type | Required | Default | Default behavior |
 |---|---|---|---|---|
-| <!-- e.g., `url` --> | <!-- e.g., string --> | <!-- e.g., yes --> | <!-- e.g., — --> | <!-- e.g., — --> |
-| <!-- e.g., `depth` --> | <!-- e.g., enum: basic, full --> | <!-- e.g., no --> | <!-- e.g., basic --> | <!-- e.g., HTTP check only; skip parked detection --> |
+| | | | | |
 
 ---
 
 ## Outputs
 
-| Field | Type | Success value | Failure value |
+| Field | Type | Success value | Failure value | Clay column name | Clay type |
+|---|---|---|---|---|---|
+| | | | | | |
+
+Clay types: Text, Number, Boolean, JSON, Date
+
+---
+
+## Clay column names
+
+| Output field | Clay column | Convention applied |
+|---|---|---|
+| | | |
+
+See `references/naming-conventions.md`.
+
+---
+
+## Agent architecture
+
+(Fill only if this Function uses agents.)
+
+| Agent | Internet | Runs after | Skipped when |
 |---|---|---|---|
-| <!-- e.g., `is_valid` --> | <!-- e.g., boolean --> | <!-- e.g., true --> | <!-- e.g., false --> |
-| <!-- e.g., `canonical_url` --> | <!-- e.g., string --> | <!-- e.g., "https://acme.com" --> | <!-- e.g., null --> |
+| | | | |
 
 ---
 
 ## Behavior notes
 
-<!-- Edge cases not obvious from the tables above. -->
-<!-- e.g., "If `depth` is `basic`, `canonical_url` is always null regardless of resolution." -->
-<!-- Delete this section if there are no non-obvious edge cases. -->
+Edge cases not obvious from the tables. Delete if none.
 
 ---
 
 ## Composition
 
-<!-- Does this Function call sub-Functions? List them here with versions. -->
-<!-- If this Function is a standalone: delete this section. -->
+Sub-Functions called (delete if standalone):
 
-| Sub-Function | Version used | Why |
+| Sub-Function | Version | Why |
 |---|---|---|
 | | | |
+
+---
+
+## Version increment triggers
+
+A v2 is cut when: (fill at design time)
 
 ---
 
@@ -58,18 +78,19 @@
 
 | Version | Date | Type | What changed |
 |---|---|---|---|
-| v1 | <!-- YYYY-MM-DD --> | initial | Initial publish |
+| v1 | YYYY-MM-DD | initial | Initial publish |
 
-<!-- Type values: "initial", "additive", "breaking" -->
-<!-- Add a row here for every change. Breaking changes also need an ADR in decisions/. -->
+Type values: `initial`, `additive`, `breaking`. Breaking changes also noted as ADRs below.
+
+---
+
+## ADRs
+
+Non-obvious design decisions made during this Function's lifetime. One entry per decision.
 
 ---
 
 ## Known consumers
-
-<!-- List every Clay table or workflow referencing this Function. -->
-<!-- Update this when you add or remove a consumer. -->
-<!-- This list matters most when you cut a new version. -->
 
 - 
 
@@ -77,7 +98,4 @@
 
 ## Related
 
-<!-- Link to usage doc and any relevant ADRs -->
-
-- Usage doc: `docs/<function-name>-usage.md`
-- ADRs: <!-- link to decisions/ entries, or "none" -->
+- Usage doc: `functions/<function_name>/usage.md`
