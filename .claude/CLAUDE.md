@@ -14,7 +14,7 @@ A framework for designing, documenting, versioning, and governing [Clay Function
 |---|---|
 | `research/` | POV memos and disagreement map that founded the v2 skill's design rules. Historical — don't edit. |
 | `skill/` | The v2 Clay Functions skill. Invoke `/clay-functions-v2` to use it. PRs here = framework improvements. |
-| `functions/` | Live Clay Functions. Each function gets its own subdirectory. |
+| `functions/` | Register of shipped functions. Build artifacts (specs, usage docs, canvases) live in `skill/`. |
 
 ## Agents
 

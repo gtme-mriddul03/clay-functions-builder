@@ -15,3 +15,5 @@ This is the v2 Clay Functions framework skill.
 | `references/` | Mental model, failure modes, ADR guide |
 | `assets/templates/` | Fillable templates: canvas, spec, usage-doc, ADR |
 | `decisions/` | ADR log for framework-level design calls |
+| `docs/` | Per-function specs and usage docs — populated as you build (`<function-name>-spec.md`, `<function-name>-usage.md`) |
+| `working/` | Canvas drafts — pre-build working files (`canvas-<function-name>.md`) |
