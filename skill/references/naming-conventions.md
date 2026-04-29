@@ -19,6 +19,7 @@ Apply these when documenting Clay column names in specs and usage docs.
 | Numbered variants | Hyphen + number suffix | Lookup: Serper Cache - 2 |
 | Source columns | Default Clay naming | Rows from: Enrichment Mainframe |
 | Function call column | Title Case matching the Function's purpose | ICP Industry Check, Domain Validator |
+| Formula column (internal) | Title Case describing what it produces | Consolidate Scores, Reconstruct URL, Gate: Confidence Check |
 
 ## Applying these to Function outputs
 
@@ -29,3 +30,24 @@ When filling the Clay column names section of a spec, map each output field:
 - LLM classification steps → `LLM: [Verb] [Subject]`
 - Final scored/classified output → `Final [X]` or `Interim [X]` depending on position in pipeline
 - Pass-through description outputs → `Claygent: Find [X]` (matches the agent that produced it)
+
+## Verb precision for Function names
+
+The `verb_noun` rule doesn't prevent generic verbs that describe mechanics rather than transformation. Generic verbs pass the format gate but fail the clarity test.
+
+**Weak verbs (avoid):** `check`, `get`, `run`, `do`, `process`, `handle`
+
+**Strong verbs (prefer):**
+
+| Verb | When to use |
+|---|---|
+| `validate` | Confirms a record meets a defined criterion (returns pass/fail) |
+| `extract` | Pulls structured data out of unstructured input |
+| `score` | Assigns a numeric or tiered quality signal |
+| `classify` | Assigns a record to one of a defined set of categories |
+| `resolve` | Finds the canonical form of ambiguous input (e.g., URL → company) |
+| `normalize` | Standardizes format of a known field (phone, domain, name) |
+| `enrich` | Adds new data fields from an external source |
+| `qualify` | Determines fit against ICP or segment criteria |
+
+**Quick test:** does the verb tell a caller what they get? `validate_domain` → a pass/fail on the domain. `check_domain` → unclear what "check" means or what comes back. If you can't answer "what does this return?" from the verb alone, pick a stronger one.

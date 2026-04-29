@@ -9,14 +9,20 @@ Feature requests for the `clay-functions-v2` skill.
 | 3 | Build Whimsical / image diagrams for documentation | Auto-generate flow diagrams for the function canvas and spec |
 | 4 | Add function's template link | Include a link to the Clay UI template in the usage doc and register |
 | 5 | Generate dependencies for agency onboarding | Produce a dependency list / onboarding doc for agencies picking up a function |
-| 6 | Expand discovery questions to capture ICP and table context | Step 1 discovery should ask about the target ICP, what the table is being used for, and what industry/segment — this context shapes exclusions, output fields, and agent prompts |
-| 7 | Proactively suggest function improvements during design | Skill should flag improvements (e.g. missing pass-throughs, useful optional outputs, related functions to consider) rather than only responding to what the user raises |
-| 8 | Use 3 parallel Haiku agents for file writing + 1 QA agent | Write canvas, spec, and usage in parallel across 3 Haiku agents to save time and tokens, then run a 4th Haiku agent for QA once all three are written |
-| 9 | Add a dedicated Exclusions section to spec template | Exclusions are currently buried in Behavior notes — they warrant their own section given they directly affect output values and version bump triggers |
-| 10 | Apply Clay column naming conventions explicitly in the spec | spec.md should follow naming-conventions.md for every column name, with the convention applied column noted — this is the doc used during building in Clay |
-| 11 | Generate Clay input descriptions alongside input design | When finalising inputs, suggest a short description for each field that can be pasted directly into Clay's input description field in the function UI |
-| 12 | Standardize on Clay UI names — drop dual naming | Spec and canvas should always use Clay UI names for all fields (inputs and outputs). There is no separate internal name in Clay — the display name is the field name. Update spec template, canvas template, and SOP 01 Step 2 to remove any mention of internal vs. UI naming. Revealed during `validate_domain`: spec used `domain`/`excluded_tlds` while Clay used `Company Domain`/`TLDs Exclusions`, causing QA blockers. |
-| 13 | Formula columns as first-class architecture components | The agent architecture template only handles Claygent/LLM rows. Load-bearing formula columns (conditional gates, consolidation formulas, URL reconstruction) need a documented place in the architecture section. Add a `Type` column (`Claygent`, `LLM`, `Formula`) to the agent table and update SOP 01 Step 5. Revealed during `validate_domain`: 5 formula columns were architecturally critical but the template had no place for them. |
-| 14 | `backlog.md` as a standard per-function artifact | Add `backlog.md` to the standard function file structure and reference it in the canvas as Q10 ("What's deferred and why?") and in SOP 03. Without standardization, deferred improvements get lost. Revealed during `validate_domain`: we created it ad hoc and it was immediately useful. |
-| 15 | Positive evidence framing as a named validity pattern in SOP 01 | SOP 01 implicitly assumes a disqualifier blocklist for content-judgment functions. Add a named alternative — positive evidence framing ("find one confirming signal") — with guidance on when to use each: blocklist when invalid set is small and well-defined; positive framing when valid set is easier to characterize or when the model is constrained. Revealed during `validate_domain`: the better pattern wasn't surfaced during design. |
-| 16 | Verb precision guidance in naming-conventions.md | `verb_noun` rule doesn't prevent generic verbs like `check`, `get`, `run` which describe mechanics not transformation. Add a note flagging weak verbs and listing strong alternatives (`validate`, `extract`, `score`, `classify`, `resolve`, `normalize`). Add a quick test: "does the verb tell a caller what they get?" Revealed during `validate_domain`: `check_domain` passed all gates before the user caught it. |
+| 8 | Use parallel agents for file writing | Write canvas, spec, and usage in parallel to save time and tokens |
+
+---
+
+## Shipped
+
+| # | Request | Shipped in |
+|---|---|---|
+| 7 | Proactively suggest function improvements during design | sprint1-sprint2 |
+| 9 | Add a dedicated Exclusions section to spec template | sprint1-sprint2 |
+| 10 | Apply Clay column naming conventions explicitly in spec | sprint1-sprint2 |
+| 11 | Generate Clay input descriptions alongside input design | sprint1-sprint2 |
+| 12 | Standardize on Clay UI names — drop dual naming | sprint1-sprint2 |
+| 13 | Formula columns as first-class architecture components | sprint1-sprint2 |
+| 14 | `backlog.md` as a standard per-function artifact | sprint1-sprint2 |
+| 15 | Positive evidence framing as a named validity pattern in SOP 01 | sprint1-sprint2 |
+| 16 | Verb precision guidance in naming-conventions.md | sprint1-sprint2 |

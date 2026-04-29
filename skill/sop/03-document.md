@@ -6,6 +6,7 @@ Two documents ship with every Function: a **spec** and a **usage doc**. They ser
 |---|---|---|---|
 | Function spec | You and future maintainers | `functions/<function_name>/spec.md` | `assets/templates/function-spec.md` |
 | Usage doc | Clay table builders (including future you) | `functions/<function_name>/usage.md` | `assets/templates/usage-doc.md` |
+| Backlog | You and future maintainers | `functions/<function_name>/backlog.md` | none — plain list |
 
 ---
 
@@ -53,7 +54,13 @@ Don't repeat the spec's full type/behavior details in the usage doc. Link to the
 2. Fill every section. If a section doesn't apply, delete it — don't leave blank placeholders.
 3. Copy `assets/templates/usage-doc.md` to `functions/<function_name>/usage.md`.
 4. Fill it after your first real run with real output values.
-5. Check: does the usage doc link to the spec? Does the spec have at least one entry in the change log?
+5. Create `functions/<function_name>/backlog.md`. Seed it from canvas Q10 — anything deferred during design goes here. Format: a plain list with a one-line reason for each item. An empty backlog is fine; the file still ships so future maintainers have a place to add items.
+6. Check: does the usage doc link to the spec? Does the spec have at least one entry in the change log? Does the backlog file exist?
+7. **Haiku QA pass.** Spin up a Haiku agent with the following prompt, substituting the actual function name:
+
+   > You are QA-reviewing the documentation for the Clay Function `<function_name>`. Read all four files: `functions/<function_name>/canvas.md`, `functions/<function_name>/spec.md`, `functions/<function_name>/usage.md`, and `functions/<function_name>/backlog.md`. Check for: (1) all required fields filled — no blank placeholders left, (2) Clay UI names used consistently across canvas and spec (Title Case, no snake_case field names), (3) Clay descriptions present for every input, (4) Exclusions section either filled or deleted, (5) Clay types are valid (Text, Number, Boolean, URL, Date — no JSON), (6) every output field has a failure value, (7) usage doc has at least one real output example (not a placeholder), (8) backlog.md exists. Return a numbered list of findings with file and section for each. Severity: blocker / moderate / minor.
+
+   Share the Haiku findings with the user before moving to `sop/04-pre-publish-checklist.md`. Fix any blockers before proceeding.
 
 ---
 

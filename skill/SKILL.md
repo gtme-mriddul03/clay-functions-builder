@@ -36,6 +36,20 @@ Clay handles internal workflow diffs safely via sandboxed editing. What Clay doe
 | Blank templates | [assets/templates/](assets/templates/) |
 | Mental model / why this exists | [references/mental-model.md](references/mental-model.md) |
 
+## Proactive improvement flags
+
+During design, don't just respond to what the user raises — scan for gaps and flag them unprompted. Check for:
+
+- **Missing pass-throughs:** any external fetch inside the Function that a caller might already have. If you find one, name the field and suggest adding it as an optional input.
+- **Missing exclusions:** categories that would logically always disqualify a record but weren't mentioned. Raise them as candidates — the user confirms or dismisses.
+- **Useful optional outputs:** fields the Function could produce cheaply alongside its primary output, that a named downstream consumer would likely read.
+- **Related Functions:** if the Function being designed shares logic with an existing Function, name the overlap and ask if composition makes sense.
+- **Weak verb in the name:** if the proposed Function name uses a generic verb (`check`, `get`, `run`), flag it before locking the interface. Suggest a stronger alternative from `references/naming-conventions.md`.
+
+Surface flags as a short bulleted list at the end of whichever step they're most relevant to (usually Step 2 or Step 4). Keep it terse — one line per flag. Don't delay the step to discuss them; the user can address or dismiss each one.
+
+---
+
 ## The opinionated positions this skill takes
 
 1. **Build gate**: a pattern earns a Function when it's used in 2+ tables, OR a confirmed second use is incoming this week. Full gate in [`sop/00`](sop/00-when-to-build.md).
@@ -45,6 +59,6 @@ Clay handles internal workflow diffs safely via sandboxed editing. What Clay doe
 5. **Confidence scores**: never include unless a downstream threshold gate reads the score.
 6. **Versions**: removing/renaming an output field, changing a field's type, removing a required input, or changing an existing optional input's default in a way that affects callers — all breaking. Adding a new optional output field or optional input with a behavior-preserving default is additive. Full classification in [`sop/02`](sop/02-version.md).
 7. **Deprecation**: old versions stay live for 90 days after the new version ships (60 days for security/correctness breaks). After window closes, remove.
-8. **Exclusion inputs**: always ask if there are categories that should always disqualify, regardless of positive criteria. Default to adding `excluded_[concept]` as optional input.
+8. **Exclusion inputs**: always ask if there are categories that should always disqualify, regardless of positive criteria. Default to adding an exclusion input as optional (default: null). Name it in Title Case matching what it excludes (e.g., `TLDs Exclusions`, `Industry Exclusions`).
 9. **Pass-throughs**: for every external fetch inside a Function, add a corresponding optional input so callers can skip the fetch if they already have the data.
 10. **Naming**: Clay columns follow `references/naming-conventions.md`. Function names are `verb_noun`. Clay UI names are `verb_noun_vN`.

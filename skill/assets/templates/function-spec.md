@@ -16,45 +16,65 @@
 
 ## Inputs
 
-| Field | Type | Required | Default | Default behavior |
-|---|---|---|---|---|
-| | | | | |
+Use Clay UI names (Title Case) — these are the exact names as they appear in the Clay Function UI.
+
+| Clay UI Name | Type | Required | Default | Default behavior | Clay description |
+|---|---|---|---|---|---|
+| | | | | | |
+
+**Clay description:** short phrase pasted directly into Clay's input description field (visible to anyone adding this Function to a table).
+
+---
+
+## Exclusions
+
+Optional inputs that disqualify records regardless of positive criteria. Delete this section if none apply.
+
+| Clay UI Name | Type | Default | What it excludes |
+|---|---|---|---|
+| | | `null` | |
+
+Removing or redefining an exclusion input triggers a version bump. Adding a new optional exclusion input (default: null) is additive — it doesn't change behavior for callers who don't pass it.
 
 ---
 
 ## Outputs
 
-| Field | Type | Success value | Failure value | Clay column name | Clay type |
-|---|---|---|---|---|---|
-| | | | | | |
+| Clay UI Name | Type | Success value | Failure value | Clay type |
+|---|---|---|---|---|
+| | | | | |
 
-Clay types: Text, Number, Boolean, JSON, Date
+Clay types: Text, Number, Boolean, URL, Date
 
 ---
 
 ## Clay column names
 
-| Output field | Clay column | Convention applied |
-|---|---|---|
-| | | |
+Reference when building in Clay. Every row here corresponds to something you name in the Clay UI. See `references/naming-conventions.md`.
 
-See `references/naming-conventions.md`.
+| Field | Clay name | Kind | Convention applied |
+|---|---|---|---|
+| | | input / output / internal | |
+
+Kind values: `input` (Function input field), `output` (output field or column consuming it), `internal` (agent or formula column inside the Function).
 
 ---
 
 ## Agent architecture
 
-(Fill only if this Function uses agents.)
+Fill if this Function uses agents or load-bearing formula columns. Delete if standalone.
 
-| Agent | Internet | Runs after | Skipped when |
-|---|---|---|---|
-| | | | |
+| Name | Type | Internet | Runs after | Skipped when |
+|---|---|---|---|---|
+| | Claygent / LLM / Formula | yes / no | | |
+
+Type guide: `Claygent` = web-research agent; `LLM` = classification/extraction with no internet; `Formula` = any formula column whose output is read by another row or consumed as a Function output — conditional gates, consolidation formulas, URL reconstruction. Exclude incidental helper formulas with no downstream reader.
 
 ---
 
 ## Behavior notes
 
-Edge cases not obvious from the tables. Delete if none.
+Edge cases not obvious from the tables above. Delete if none.
 
 ---
 
@@ -99,3 +119,4 @@ Non-obvious design decisions made during this Function's lifetime. One entry per
 ## Related
 
 - Usage doc: `functions/<function_name>/usage.md`
+- Backlog: `functions/<function_name>/backlog.md`

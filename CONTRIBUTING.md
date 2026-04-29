@@ -32,6 +32,7 @@ Functions and skill improvements are separate workstreams with separate PRs. Don
 - Every PR requires **1 approval** from the other person before merging.
 - Function PRs and skill PRs stay separate — different lifecycles, different revert implications.
 - The only exception: a template fix so tightly coupled to a specific function that separating the diff would be incomprehensible. Note it explicitly in the PR description if you do this.
+- **Claude must never push to remote or open a PR without explicit approval from Mriddul.** Committing locally is fine; pushing and opening PRs require a direct instruction in the session.
 
 ---
 

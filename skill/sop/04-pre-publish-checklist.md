@@ -19,6 +19,9 @@ Run this before publishing any Function. Render as a pass/fail table — one row
 | **Documentation** | | |
 | `functions/<name>/spec.md` exists and all sections filled | | |
 | `functions/<name>/usage.md` exists with at least one real output example | | |
+| `functions/<name>/backlog.md` exists (empty is fine) | | |
+| All input fields have Clay descriptions filled | | |
+| Exclusions section filled or deleted if none apply | | |
 | Clay column names section filled in spec | | |
 | Version increment triggers documented in spec | | |
 | Change log has at least the initial v1 entry | | |
