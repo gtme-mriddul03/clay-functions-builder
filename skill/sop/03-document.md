@@ -6,6 +6,7 @@ Two documents ship with every Function: a **spec** and a **usage doc**. They ser
 |---|---|---|---|
 | Function spec | You and future maintainers | `functions/<function_name>/spec.md` | `assets/templates/function-spec.md` |
 | Usage doc | Clay table builders (including future you) | `functions/<function_name>/usage.md` | `assets/templates/usage-doc.md` |
+| Backlog | You and future maintainers | `functions/<function_name>/backlog.md` | none — plain list |
 
 ---
 
@@ -53,7 +54,8 @@ Don't repeat the spec's full type/behavior details in the usage doc. Link to the
 2. Fill every section. If a section doesn't apply, delete it — don't leave blank placeholders.
 3. Copy `assets/templates/usage-doc.md` to `functions/<function_name>/usage.md`.
 4. Fill it after your first real run with real output values.
-5. Check: does the usage doc link to the spec? Does the spec have at least one entry in the change log?
+5. Create `functions/<function_name>/backlog.md`. Seed it from canvas Q10 — anything deferred during design goes here. Format: a plain list with a one-line reason for each item. An empty backlog is fine; the file still ships so future maintainers have a place to add items.
+6. Check: does the usage doc link to the spec? Does the spec have at least one entry in the change log? Does the backlog file exist?
 
 ---
 
