@@ -19,7 +19,7 @@ Apply these when documenting Clay column names in specs and usage docs.
 | Numbered variants | Hyphen + number suffix | Lookup: Serper Cache - 2 |
 | Source columns | Default Clay naming | Rows from: Enrichment Mainframe |
 | Function call column | Title Case matching the Function's purpose | ICP Industry Check, Domain Validator |
-| Formula column (internal) | Formula: [What it produces] | Formula: Consolidate Scores, Formula: Reconstruct URL |
+| Formula column (internal) | Title Case describing what it produces | Consolidate Scores, Reconstruct URL, Gate: Confidence Check |
 
 ## Applying these to Function outputs
 

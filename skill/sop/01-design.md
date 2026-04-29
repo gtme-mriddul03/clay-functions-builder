@@ -155,6 +155,6 @@ Once written and published, any change that breaks a consumer requires a new ver
 - The column calling the Function → Title Case name matching its purpose
 - Boolean outputs → `Is [X]?`
 - Agent columns inside the Function → `Claygent: [Verb] [Subject]` or `LLM: [Verb] [Subject]`
-- Formula columns inside the Function → `Formula: [What it produces]` or a plain descriptive Title Case name
+- Formula columns inside the Function → plain descriptive Title Case (e.g., `Consolidate Scores`, `Reconstruct URL`)
 
 When naming is done, copy `assets/templates/function-spec.md` to `functions/<verb_noun>/spec.md` and fill all sections.

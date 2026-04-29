@@ -44,7 +44,7 @@ Removing or redefining an exclusion input triggers a version bump. Adding a new 
 |---|---|---|---|---|
 | | | | | |
 
-Clay types: Text, Number, Boolean, JSON, Date
+Clay types: Text, Number, Boolean, URL, Date
 
 ---
 

@@ -52,7 +52,7 @@ Name the downstream table, formula, or Function. List only the fields they actua
 |---|---|---|---|---|
 | | | | | |
 
-Clay types: Text, Number, Boolean, JSON, Date
+Clay types: Text, Number, Boolean, URL, Date
 
 **Reasoning string needed?** Yes / No — because:
 
