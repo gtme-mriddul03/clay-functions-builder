@@ -6,9 +6,10 @@ Specs and usage docs live in [`../skill/docs/`](../skill/docs/). Canvas drafts l
 
 ## Shipped functions
 
-| Function | Spec | Usage doc | Status |
-|---|---|---|---|
-| *(none yet)* | — | — | — |
+| Function | Version | Spec | Usage doc | Status |
+|---|---|---|---|---|
+| `check_public_listing` | v1 | [spec.md](check_public_listing/spec.md) | [usage.md](check_public_listing/usage.md) | active |
+| `validate_domain` | v1 | [spec.md](validate_domain/spec.md) | [usage.md](validate_domain/usage.md) | active |
 
 ---
 
